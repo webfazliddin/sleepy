@@ -70,7 +70,7 @@ const ApiService = {
       async (error) => {
         if (error.request.status == 401) {
           localStorage.clear();
-          window.location.href = "/auth/register2";
+          window.location.href = "/auth/login";
         }
         if (error.request.status == 403) {
           window.location.href = "/error/403";

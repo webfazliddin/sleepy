@@ -6,6 +6,7 @@ import contact from '@/_mockApis/components/school-pages/teachers';
 import { EyeIcon } from 'vue-tabler-icons';
 const page1 = ref(1);
 const store = useTeachersStore();
+import PATIENT from '@/api/PATIENT'
 
 onMounted(() => {
     store.fetchTeachers();
@@ -13,6 +14,8 @@ onMounted(() => {
 const getTeachers: any = computed(() => {
     return store.teachers;
 });
+
+PATIENT.PatientGetList()
 
 const valid = ref(true);
 const dialog = ref(false);

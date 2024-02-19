@@ -1,20 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive } from 'vue'
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router'
 import { Form } from 'vee-validate';
 
 /*Social icons*/
 import profile from '@/assets/images/svgs/profile-circle.svg';
 import { notify } from '@kyvg/vue3-notification';
 import type { AxiosResponse } from 'axios';
-import AccountService from '@/services/other/account.service';
-import { useRouter } from 'vue-router';
+// import AccountService from '@/services/other/account.service';
 
-interface LoginResponse {
-    message: string;
-    token: string;
+export interface ILoginView {
+  username: string
+  password: string
 }
 
+const router = useRouter()
+const authStore = useAuthStore()
 const checkbox = ref(false);
 const valid = ref(false);
 const show2 = ref(false);
@@ -23,36 +25,23 @@ const password = ref('rux');
 const passwordRules = ref([(v: string) => !!v || 'Parolni kiriting']);
 const login = ref([(v: string) => !!v || 'Loginni kiriting']);
 const savePasswordRules = ref([(v: any) => !!v || 'Davom etish uchun rozi bo`lishingiz kerak!']);
-const router = useRouter();
 
-const authStore = useAuthStore();
 
 async function validate(values: any, { setErrors }: any) {
-    AccountService.Login({ username: username.value, password: password.value })
+    authStore.login({ username: username.value, password: password.value })
         .then((res) => {
-            authStore.token = res.data.token;
-            localStorage.setItem('token', res.data.token);
+           
 
             notify({
                 text: res.data.message,
                 type: 'success'
             });
 
-            router.replace(authStore.returnUrl || '/');
+            router.replace('/');
         })
         .catch((e) => {
             setErrors(e);
         });
-
-    // authStore
-    //     .login(username.value, password.value)
-    //     .then((res) => {
-    //         console.log(res)
-    //         // notify({
-    //         //     text: res
-    //         // });
-    //     })
-    //     .catch((error) => setErrors({ message: '' }));
 }
 </script>
 <template>
